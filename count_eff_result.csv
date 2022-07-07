@@ -1,0 +1,31 @@
+Model,Order Count,Efficiency
+random stock,96,0.511
+random stock,99,0.489
+random stock,100,0.476
+random stock,96,0.525
+random stock,96,0.488
+random stock,96,0.497
+random stock,95,0.506
+random stock,101,0.503
+random stock,100,0.443
+random stock,101,0.514
+prior random stock,96,0.483
+prior random stock,103,0.486
+prior random stock,106,0.482
+prior random stock,101,0.509
+prior random stock,103,0.491
+prior random stock,96,0.512
+prior random stock,91,0.51
+prior random stock,102,0.498
+prior random stock,103,0.506
+prior random stock,107,0.535
+prior nearest stock,105,0.555
+prior nearest stock,101,0.533
+prior nearest stock,105,0.542
+prior nearest stock,102,0.545
+prior nearest stock,100,0.533
+prior nearest stock,98,0.546
+prior nearest stock,97,0.554
+prior nearest stock,97,0.525
+prior nearest stock,107,0.518
+prior nearest stock,99,0.533

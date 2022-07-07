@@ -1,0 +1,222 @@
+import sys
+import random
+import numpy as np
+import cv2
+
+import matplotlib.pyplot as plt
+import pdb
+
+class SecondaryOutQueue
+    queue = []
+
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, secondary):
+        self.queue.append(secondary)
+
+    def dequeue(self):
+        return self.queue.pop()
+
+    def remove(self, secondary):
+        self.queue.remove(secondary)
+
+    def find(self, x, y):
+        new_queue = []
+        found = new Secondary(-1, -1)
+        for i in range(0, len(queue)):
+            sec = queue[i]
+            if(sec.x == x and sec.y == y):
+                found = sec
+            else:
+                new_queue.append(sec)
+        queue = new_queue
+
+        return found, queue
+
+class Primary:
+    state = 0
+    """
+    0: 注文待ち
+    1: 迎車中(オーダー)
+    2: 迎車中(セカンダリ)
+    3: セカンダリ無し
+    """
+
+    x = 0
+    y = 0
+    dest_x = 0
+    dest_y = 0
+
+    secondary_in_queue = []
+
+    def __init__(self, init_x, init_y, num_sec):
+        self.x = init_x
+        self.y = init_y
+        for i in range(num_secondary):
+            secondary = new Secandary(init_x, init_y)
+            secondary_in_queue.enqueue(secondary)
+
+    def set_dest(self, dest_x, dest_y):
+        self.dest_x = dest_x
+        self.dest_y = dest_y
+
+    def move(self, grid_size):
+        if (self.state == 0):
+            dir = random.randrange(0, 5)
+
+            if(dir == 1):
+                self.y -= 1
+            elif(dir == 2):
+                self.x -= 1
+            elif(dir == 3):
+                self.y += 1
+            elif(dir == 4):
+                self.x += 1
+
+            self.move_random += 1
+
+        else:
+
+            move_flag = 0
+            if(self.dest_x != self.x):
+                self.x += (self.dest_x - self.x)/np.abs(self.dest_x - self.x)
+                move_flag = 1
+                self.move_total += 1
+            if(self.dest_y != self.y):
+                self.y += (self.dest_y - self.y)/np.abs(self.dest_y - self.y)
+                move_flag = 1
+                self.move_total += 1
+
+            if(move_flag == 0):
+                if(self.state == 1)
+                    secondary = self.secondary_in_queue.dequeue()
+                    secondary.x = self.x
+                    secondary.y = self.y
+                    dest_x = int(random.randrange(0, grid_size))
+                    dest_y = int(random.randrange(0, grid_size))
+                    secondary.set_dest(dest_x, dest_y)
+                    secondary.state = 1
+                    secondary_out_queue.enqueue(secondary)
+                    if(len(self.secondary_in_queue) == 0):
+                        self.state = 3
+                else:
+                    secondary, secondary_out_queue = find(self.x, self.y)
+                    self.secondary_in_queue.append(secondary)
+                    secondary_out_queue.remove(secondary)
+
+    def calc_dist(self, x, y):
+        dist = np.sqrt((self.x - x)**2 + (self.y - y)**2)
+        return dist
+
+class Secondary:
+
+    state = 0
+    """
+    0: 乗車待ち
+    1: 乗車中
+    2: 拾い待ち
+    """
+
+    x = 0
+    y = 0
+    dest_x = 0
+    dest_y = 0
+
+    def __init__(self, init_x, init_y):
+        self.x = init_x
+        self.y = init_y
+
+    def set_dest(self, dest_x, dest_y):
+        self.dest_x = dest_x
+        self.dest_y = dest_y
+
+    def move(self, grid_size):
+        if(self.state == 1):
+            move_flag = 0
+            if(self.dest_x != self.x):
+                self.x += (self.dest_x - self.x)/np.abs(self.dest_x - self.x)
+                move_flag = 1
+                self.move_total += 1
+            if(self.dest_y != self.y):
+                self.y += (self.dest_y - self.y)/np.abs(self.dest_y - self.y)
+                move_flag = 1
+                self.move_total += 1
+
+            if(move_flag == 0):
+                self.state = 2
+
+args = sys.argv
+num_primary = int(args[1])
+num_secondary = int(args[2])
+grid_size = int(args[3])
+sim_count = int(args[4])
+busy_max = int(args[5])
+supply_const = float(args[6])
+plot_flag = int(args[7])
+
+primaries = []
+secondary_out_queue = new SecondaryOutQueue()
+busy_num = 0
+
+for i in range(0, num_primary):
+    init_x = int(random.randrange(0, grid_size))
+    init_y = int(random.randrange(0, grid_size))
+    primary = Primary(init_x, init_y, num_secondary)
+    primaries.append(primary)
+
+    order_supply = supply_const*num_primary
+    order_prob = order_supply/sim_count
+
+    count0_vec = [num_primary]
+    count1_vec = [0]
+    count2_vec = [0]
+
+for i in range(0, sim_count):
+    print("*** Simulating " + str(i) + "-th Step ***")
+
+    prob = random.uniform(0.0, 1.0)
+    if(prob < order_prob):
+        dest_x = random.randrange(0, grid_size)
+        dest_y = random.randrange(0, grid_size)
+
+        accept_flag = 0
+        dist_vec = []
+        for j in range(0, num_cars):
+            primary = primaries[j]
+            dist_vec.append(primary.calc_dist(dest_x, dest_y))
+
+        ord = np.argsort(dist_vec)
+        for car_idx in ord:
+            primary = primaries[car_idx]
+            if(primary.state == 0 && 0 < len(primary.secondary_in_queue)):
+                primary.set_dest(dest_x, dest_y)
+                primary.state = 1
+                accept_flag = 1
+                break
+
+    for primary_idx in range(0, num_primary):
+        primary = primaries[primary_idx]
+        if(primary.state == 0 or primary.state == 3):
+            if(0 < len(secondary_out_queue)):
+
+                dist_vec = []
+                for j in range(0, len(secondary_out_queue)):
+                    secondary = secondary_out_queue[j]
+                    dist_vec.append(primary.calc_dist(secondary.dest_x, secondary.dest_y))
+
+                ord = np.argsort(dist_vec)
+                for secondary_idx in ord:
+                    if(len(primary.secondary_in_queue) < num_secondary):
+                        secondary = secondary_out_queue[secondary_idx]
+                        primary.set_dest(secondary.dest_x, secondary.dest_y)
+                        primary.state = 2
+                        break
+
+    for primary_idx in range(0, num_cars):
+        primary = primaries[primary_idx]
+        primary.move()
+
+    for secondary_idx in range(0, len(secondary_out_queue)):
+        secondary = secondary_out_queue[secondary_idx]
+        secondary.move()
